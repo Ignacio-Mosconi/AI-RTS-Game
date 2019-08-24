@@ -1,39 +1,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum NavigationMeshLimit
+[System.Serializable]
+public class PathNodeGenerator
 {
-    TopLeft,
-    TopRight,
-    BottomLeft,
-    BottomRight
-}
-
-public class PathNodeGenerator : MonoBehaviour
-{
-    [SerializeField, Range(0f, 500f)] float minPosX = 0f;
-    [SerializeField, Range(500f, 1000f)] float maxPosX = 1000f;
-    [SerializeField, Range(0f, 500f)] float minPosZ = 0f;
-    [SerializeField, Range(500f, 1000f)] float maxPosZ = 1000f;
+    [SerializeField, Range(-1000f, 0f)] float minPosX = -500f;
+    [SerializeField, Range(0f, 1000f)] float maxPosX = 500f;
+    [SerializeField, Range(-1000f, 0f)] float minPosZ = -500f;
+    [SerializeField, Range(0f, 1000f)] float maxPosZ = 500f;
     [SerializeField] float pathNodeDistance = 10f;
     [SerializeField] string terrainTag = "Terrain";
     [SerializeField] string dynamicObstacleTag = "DynamicObstacle";
 
-    List<PathNode> pathNodes;
+    float hypothenuseDistance;
     
-    const float RayDistance = 10000f;
+    const float RayDistance = 1000f;
+    const float NegligibleDistance = 0.1f;
 
-    void Start()
+    bool AreNodesAdjacent(PathNode firstNode, PathNode secondNode)
     {
+        Vector3 diff = secondNode.Position - firstNode.Position;
 
+        float sqrDistance = diff.sqrMagnitude;
+        bool areConnected = !Physics.Raycast(firstNode.Position, diff, hypothenuseDistance);
+
+        return (areConnected && sqrDistance - NegligibleDistance <= hypothenuseDistance * hypothenuseDistance && firstNode != secondNode);
     }
 
-    List<PathNode> GeneratePathNodes()
+    public List<PathNode> GeneratePathNodes()
     {   
-        List<PathNode> generatedPathNodes = new List<PathNode>();
+        List<PathNode> pathNodes = new List<PathNode>();
 
-        for (float z = minPosZ; z < maxPosZ; z += pathNodeDistance)
-            for (float x = minPosX; x < maxPosX; z += pathNodeDistance)
+        for (float z = minPosZ; z <= maxPosZ; z += pathNodeDistance)
+            for (float x = minPosX; x <= maxPosX; x += pathNodeDistance)
             {
                 RaycastHit hitInfo; 
                 Vector3 rayOrigin = new Vector3(x, RayDistance, z);
@@ -53,26 +52,12 @@ public class PathNodeGenerator : MonoBehaviour
                 }
             }
 
+        float legSquared = pathNodeDistance * pathNodeDistance;
+        hypothenuseDistance = Mathf.Sqrt(legSquared + legSquared);
+
         foreach (PathNode pathNode in pathNodes)
-        {
-            RaycastHit hitInfo;
-            List<PathNode> adjacentNodes = pathNodes.FindAll(n => AreNodesAdjacent(pathNode, n));
+            pathNode.AdjacentNodes = pathNodes.FindAll(n => AreNodesAdjacent(pathNode, n));
 
-            foreach (PathNode adjacentNode in adjacentNodes)
-            {
-                Vector3 rayDirection = (adjacentNode.Position - pathNode.Position).normalized;   
-                if (Physics.Raycast(pathNode.Position, rayDirection, out hitInfo, pathNodeDistance))
-                    adjacentNodes.Remove(adjacentNode);
-            }
-
-            pathNode.AdjacentNodes = adjacentNodes;
-        }
-    }
-
-    bool AreNodesAdjacent(PathNode firstNode, PathNode secondNode)
-    {
-        float distance = Vector3.Distance(firstNode.Position, secondNode.Position);
-
-        return distance <= pathNodeDistance;
+        return pathNodes;
     }
 }

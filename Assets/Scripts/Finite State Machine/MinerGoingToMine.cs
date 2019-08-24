@@ -16,7 +16,6 @@ public class MinerGoingToMine : FsmState<Miner>
 
     public override void EnterState()
     {
-        Debug.Log("Entered Going to Mine");
         targetPosition = targetMiningPoint.position;
     }
 

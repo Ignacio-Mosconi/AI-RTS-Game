@@ -16,7 +16,6 @@ public class MinerCarryingGold : FsmState<Miner>
 
     public override void EnterState()
     {
-        Debug.Log("Entered Carrying Gold");
         targetPosition = targetDeployPoint.position;
     }
 

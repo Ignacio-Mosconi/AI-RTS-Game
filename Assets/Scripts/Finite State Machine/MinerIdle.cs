@@ -9,7 +9,6 @@ public class MinerIdle : FsmState<Miner>
 
     public override void EnterState()
     {
-        Debug.Log("Entered Idle");
         idleTimer = 0f;
     }
 

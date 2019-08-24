@@ -11,7 +11,6 @@ public class MinerMining : FsmState<Miner>
 
     public override void EnterState()
     {
-        Debug.Log("Entered Mining");
         mineTimer = 0f;
         minedGold = 0;
     }
@@ -24,8 +23,6 @@ public class MinerMining : FsmState<Miner>
         {
             mineTimer = 0f;
             minedGold += goldMinedPerInterval;
-
-            Debug.Log("Mined Gold: " + minedGold);
 
             if (minedGold >= owner.MaxGoldCarry)
             {

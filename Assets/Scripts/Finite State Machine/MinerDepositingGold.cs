@@ -9,7 +9,6 @@ public class MinerDepositingGold : FsmState<Miner>
 
     public override void EnterState()
     {
-        Debug.Log("Entered Depositing Gold");
         depositTimer = 0f;
     }
 
