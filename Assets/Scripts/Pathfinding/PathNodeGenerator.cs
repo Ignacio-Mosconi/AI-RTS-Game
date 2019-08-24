@@ -60,4 +60,9 @@ public class PathNodeGenerator
 
         return pathNodes;
     }
+
+    public float HypothenuseSqrDistance
+    {
+        get { return hypothenuseDistance * hypothenuseDistance; }
+    }
 }

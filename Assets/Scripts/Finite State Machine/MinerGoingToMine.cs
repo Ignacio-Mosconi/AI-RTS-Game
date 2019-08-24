@@ -5,13 +5,13 @@ public class MinerGoingToMine : FsmState<Miner>
 {
     [SerializeField] Transform targetMiningPoint = default;
 
-    Transform minerTransform;
+    PathNodeAgent agent;
     Vector3 targetPosition;
 
     public override void Initialize(Miner owner)
     {
         base.Initialize(owner);
-        minerTransform = owner.transform;
+        agent = owner.Agent;
     }
 
     public override void EnterState()
@@ -26,12 +26,9 @@ public class MinerGoingToMine : FsmState<Miner>
 
     public override void UpdateState()
     {
-        Vector3 currentPosition = minerTransform.position;
-        float minerSpeed = owner.MovementSpeed * Time.deltaTime;
-        
-        minerTransform.position = Vector3.MoveTowards(currentPosition, targetPosition, minerSpeed);
+        agent.SimpleMove(targetPosition);
 
-        if (minerTransform.position == targetPosition)
+        if (agent.HasReachedDestination)
             owner.OnReachDestination.Invoke();
     }
 }

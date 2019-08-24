@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(PathNodeAgent))]
 public class Miner : MonoBehaviour
 {
     [Header("Miner States")]
@@ -11,8 +12,9 @@ public class Miner : MonoBehaviour
     [SerializeField] MinerDepositingGold minerDepositingGold = new MinerDepositingGold();
 
     [Header("Common Attributes")]
-    [SerializeField, Range(2f, 10f)] float movementSpeed = 5f;
     [SerializeField, Range(50, 100)] int maxGoldCarry = 75;
+
+    public PathNodeAgent Agent { get; private set; }
 
     public UnityEvent OnTimeOut { get; private set; } = new UnityEvent();
     public UnityEvent OnReachDestination { get; private set; } = new UnityEvent();
@@ -22,6 +24,8 @@ public class Miner : MonoBehaviour
 
     void Awake()
     {
+        Agent = GetComponent<PathNodeAgent>();
+
         minerIdle.Initialize(this);
         minerGoingToMine.Initialize(this);
         minerMining.Initialize(this);
@@ -45,11 +49,6 @@ public class Miner : MonoBehaviour
     void Update()
     {
         fsm.UpdateCurrentState();
-    }
-
-    public float MovementSpeed
-    {
-        get { return movementSpeed; }
     }
 
     public int MaxGoldCarry
