@@ -1,37 +1,40 @@
 ﻿using UnityEngine.Events;
 
-public class FiniteStateMachine<T>
+namespace GreenNacho.AI.Fsm
 {
-    Table<FsmState<T>, UnityEvent, FsmState<T>> fsmTable;
-    FsmState<T> currentState;
-
-    public FiniteStateMachine(FsmState<T>[] states, UnityEvent[] transitionEvents, FsmState<T> entryState)
+    public class FiniteStateMachine<T>
     {
-        fsmTable = new Table<FsmState<T>, UnityEvent, FsmState<T>>(states, transitionEvents);
-        currentState = entryState;
-        currentState.EnterState();
-    }
+        Table<FsmState<T>, UnityEvent, FsmState<T>> fsmTable;
+        FsmState<T> currentState;
 
-    void OnTransitionEventTrigger(UnityEvent transitionEvent)
-    {
-        FsmState<T> targetState = fsmTable[currentState, transitionEvent];
-
-        if (targetState != null)
+        public FiniteStateMachine(FsmState<T>[] states, UnityEvent[] transitionEvents, FsmState<T> entryState)
         {
-            currentState.ExitState();
-            currentState = targetState;
-            targetState.EnterState();
+            fsmTable = new Table<FsmState<T>, UnityEvent, FsmState<T>>(states, transitionEvents);
+            currentState = entryState;
+            currentState.EnterState();
         }
-    }
 
-    public void SetTransitionRelation(FsmState<T> sourceState, FsmState<T> targetState, UnityEvent transitionEvent)
-    {
-        fsmTable[sourceState, transitionEvent] = targetState;
-        transitionEvent.AddListener(() => OnTransitionEventTrigger(transitionEvent));
-    }
+        void OnTransitionEventTrigger(UnityEvent transitionEvent)
+        {
+            FsmState<T> targetState = fsmTable[currentState, transitionEvent];
 
-    public void UpdateCurrentState()
-    {
-        currentState.UpdateState();
+            if (targetState != null)
+            {
+                currentState.ExitState();
+                currentState = targetState;
+                targetState.EnterState();
+            }
+        }
+
+        public void SetTransitionRelation(FsmState<T> sourceState, FsmState<T> targetState, UnityEvent transitionEvent)
+        {
+            fsmTable[sourceState, transitionEvent] = targetState;
+            transitionEvent.AddListener(() => OnTransitionEventTrigger(transitionEvent));
+        }
+
+        public void UpdateCurrentState()
+        {
+            currentState.UpdateState();
+        }
     }
 }

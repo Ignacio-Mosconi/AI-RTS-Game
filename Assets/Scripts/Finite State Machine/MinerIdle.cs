@@ -1,4 +1,5 @@
 using UnityEngine;
+using GreenNacho.AI.Fsm;
 
 [System.Serializable]
 public class MinerIdle : FsmState<Miner>

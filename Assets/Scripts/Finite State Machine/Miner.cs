@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using GreenNacho.AI.Fsm;
+using GreenNacho.AI.Pathfinding;
 
 [RequireComponent(typeof(PathNodeAgent))]
 public class Miner : MonoBehaviour

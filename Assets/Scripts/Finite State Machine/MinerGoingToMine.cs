@@ -1,4 +1,6 @@
 using UnityEngine;
+using GreenNacho.AI.Fsm;
+using GreenNacho.AI.Pathfinding;
 
 [System.Serializable]
 public class MinerGoingToMine : FsmState<Miner>
