@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class PathfindingManager : MonoBehaviour
 {
+    public enum PathfindingAlgorithm
+    {
+        BreathFirst,
+        DepthFirst,
+        Dijkstra
+    }
+
     #region Singleton
 
     static PathfindingManager instance;
@@ -34,6 +41,7 @@ public class PathfindingManager : MonoBehaviour
     #endregion
 
     [SerializeField] PathNodeGenerator pathNodeGenerator = new PathNodeGenerator();
+    [SerializeField] PathfindingAlgorithm pathfindingAlgorithm = PathfindingAlgorithm.BreathFirst;
     
     List<PathNode> pathNodes = new List<PathNode>();
     List<PathNode> openNodes = new List<PathNode>();
@@ -61,7 +69,27 @@ public class PathfindingManager : MonoBehaviour
         PathNode openNode = null;
         
         if (openNodes.Count > 0)
-            openNode = openNodes[0];
+        {
+            switch (pathfindingAlgorithm)
+            {
+                case PathfindingAlgorithm.BreathFirst:
+                    openNode = openNodes[0];
+                    break;
+
+                case PathfindingAlgorithm.DepthFirst:
+                    openNode = openNodes[openNodes.Count - 1];
+                    break;
+
+                case PathfindingAlgorithm.Dijkstra:
+                    PathNode nextNode = openNodes[0];
+                    
+                    foreach (PathNode pathNode in openNodes) 
+                        if (pathNode.AccumulatedCost < nextNode.AccumulatedCost)
+                            nextNode = pathNode;
+                    openNode = nextNode;
+                    break;
+            }
+        }
 
         return openNode;
     }
@@ -103,7 +131,10 @@ public class PathfindingManager : MonoBehaviour
         foreach (PathNode pathNode in parentNode.AdjacentNodes)
             if (pathNode.State == NodeState.Unreviewed)
             {
+                float sqrDistance = (parentNode.Position - pathNode.Position).sqrMagnitude;
+                
                 pathNode.Parent = parentNode;
+                pathNode.AccumulatedCost += parentNode.AccumulatedCost + sqrDistance;
                 OpenNode(pathNode);
             }
     }
@@ -114,11 +145,13 @@ public class PathfindingManager : MonoBehaviour
         {
             pathNode.State = NodeState.Unreviewed;
             pathNode.Parent = null;
+            pathNode.AccumulatedCost = pathNode.Cost;
         }
         foreach (PathNode pathNode in closedNodes)
         {
             pathNode.State = NodeState.Unreviewed;
             pathNode.Parent = null;
+            pathNode.AccumulatedCost = pathNode.Cost;
         }
 
         openNodes.Clear();

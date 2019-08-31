@@ -936,6 +936,7 @@ MonoBehaviour:
     pathNodeDistance: 2
     terrainTag: Terrain
     dynamicObstacleTag: DynamicObstacle
+  pathfindingAlgorithm: 2
 --- !u!4 &1439537051
 Transform:
   m_ObjectHideFlags: 0
