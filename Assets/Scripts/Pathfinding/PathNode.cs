@@ -14,6 +14,7 @@ namespace GreenNacho.AI.Pathfinding
     {
         public List<PathNode> AdjacentNodes { get; set; }
         public PathNode Parent { get; set; }
+        public PathNode Child { get; set; }
         public NodeState State { get; set; }
         public Vector3 Position {get; private set; }
         public bool CanBeBlocked { get; private set; }
@@ -24,6 +25,7 @@ namespace GreenNacho.AI.Pathfinding
         {
             AdjacentNodes = new List<PathNode>();
             Parent = null;
+            Child = null;
             State = NodeState.Unreviewed;
             Position = position;
             CanBeBlocked = canBeBlocked;

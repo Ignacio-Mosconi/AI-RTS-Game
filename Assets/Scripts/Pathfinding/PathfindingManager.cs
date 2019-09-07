@@ -153,6 +153,7 @@ namespace GreenNacho.AI.Pathfinding
                     float sqrDistance = (parentNode.Position - pathNode.Position).sqrMagnitude;
 
                     pathNode.Parent = parentNode;
+                    parentNode.Child = pathNode;
                     pathNode.AccumulatedCost += parentNode.AccumulatedCost + sqrDistance;
                     OpenNode(pathNode);
                 }
@@ -164,12 +165,14 @@ namespace GreenNacho.AI.Pathfinding
             {
                 pathNode.State = NodeState.Unreviewed;
                 pathNode.Parent = null;
+                pathNode.Child = null;
                 pathNode.AccumulatedCost = pathNode.Cost;
             }
             foreach (PathNode pathNode in closedNodes)
             {
                 pathNode.State = NodeState.Unreviewed;
                 pathNode.Parent = null;
+                pathNode.Child = null;
                 pathNode.AccumulatedCost = pathNode.Cost;
             }
 
@@ -177,16 +180,46 @@ namespace GreenNacho.AI.Pathfinding
             closedNodes.Clear();
         }
 
-        void FillPath(PathNode destinationNode, out Stack<PathNode> path)
+        void FillPath(PathNode destinationNode, PathNode originNode, out Stack<PathNode> path)
         {
-            PathNode node = destinationNode;
+            PathNode castNode = destinationNode;
+            PathNode auxNode = originNode;
+            bool pathFinished = false;
             path = new Stack<PathNode>();
-
-            while (node.Parent != null)
+                    
+            Vector3 diff;
+            PathNode node = destinationNode;
+            
+            while (node != null)
             {
-                path.Push(node);
+                if (node.Parent != null)
+                    node.Parent.Child = node;
+                
                 node = node.Parent;
             }
+
+             //theta-star
+            while(!pathFinished)
+            {
+                diff = (castNode.Position - auxNode.Position) + Vector3.up * 0.5f;
+                if (auxNode.Child != castNode && Physics.Raycast(castNode.Position + Vector3.up * 0.5f, diff.normalized, diff.magnitude))
+                {
+                    auxNode = auxNode.Child;
+                }
+                else
+                {
+                    path.Push(castNode);
+                    castNode = auxNode;
+                    if (castNode == originNode)
+                    {
+                        path.Push(castNode);
+                        pathFinished = true;
+                    }                        
+                    else
+                        auxNode = originNode;
+                }
+            }
+
         }
 
         public Stack<PathNode> CreatePath(Vector3 origin, Vector3 destination)
@@ -205,7 +238,7 @@ namespace GreenNacho.AI.Pathfinding
                 if (pathNode == destinationNode)
                 {
                     foundDestination = true;
-                    FillPath(pathNode, out path);
+                    FillPath(pathNode,originNode, out path);
                 }
                 CloseNode(pathNode);
                 if (!foundDestination)
