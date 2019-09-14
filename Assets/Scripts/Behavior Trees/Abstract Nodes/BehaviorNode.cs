@@ -9,8 +9,9 @@
     public abstract class BehaviorNode
     {
         protected  BehaviorNodeState nodeState;
+        public string NodeName { get; private set; }
 
-        public abstract BehaviorNodeState Evaluate();
+        public abstract BehaviorNodeState EvaluateState();
 
         #region Properties
 

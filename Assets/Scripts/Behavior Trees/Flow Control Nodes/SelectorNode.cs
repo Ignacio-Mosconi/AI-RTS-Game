@@ -2,31 +2,31 @@ using System.Collections.Generic;
 
 namespace GreenNacho.AI.BehaviorTrees
 {
-    public class SequenceNode : FlowControlNode
+    [System.Serializable]
+    public class SelectorNode : FlowControlNode
     {
-        public SequenceNode(List<BehaviorNode> children) : base(children)
+        public SelectorNode(List<BehaviorNode> children) : base(children)
         {
-            
+
         }
 
-        public override BehaviorNodeState Evaluate()
+        public override BehaviorNodeState EvaluateState()
         {
             BehaviorNodeState nodeState = BehaviorNodeState.None;
-            bool anyChildRunning = false;
 
             foreach (BehaviorNode behaviorNode in children)
             {
-                switch (behaviorNode.Evaluate())
+                switch (behaviorNode.EvaluateState())
                 {
                     case BehaviorNodeState.Failure:
-                        nodeState = BehaviorNodeState.Failure;
                         break;
                     
                     case BehaviorNodeState.Success:
+                        nodeState = BehaviorNodeState.Success;
                         break;
 
                     case BehaviorNodeState.Running:
-                        anyChildRunning = true;
+                        nodeState = BehaviorNodeState.Running;
                         break;
                     default:
                         break;
@@ -35,9 +35,6 @@ namespace GreenNacho.AI.BehaviorTrees
                 if (nodeState != BehaviorNodeState.None)
                     break;
             }
-
-            if (nodeState == BehaviorNodeState.None)
-                nodeState = (anyChildRunning) ? BehaviorNodeState.Running : BehaviorNodeState.Success;
 
             return nodeState;
         }

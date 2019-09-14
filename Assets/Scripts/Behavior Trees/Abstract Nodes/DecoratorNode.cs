@@ -1,5 +1,6 @@
 namespace GreenNacho.AI.BehaviorTrees
 {
+    [System.Serializable]
     public abstract class DecoratorNode : BehaviorNode
     {
         protected BehaviorNode child;
