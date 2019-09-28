@@ -5,13 +5,15 @@ namespace GreenNacho.AI.BehaviorTrees
     [System.Serializable]
     public class SequenceNode : FlowControlNode
     {
-        public SequenceNode() : base(behaviorName: "Sequence")
+        public SequenceNode(string sequenceName) : base(behaviorName: sequenceName + " Sequence")
         {
 
         }
 
         public override BehaviorNodeState UpdateState()
         {
+            base.OnStateUpdate();
+
             BehaviorNodeState sequenceState = BehaviorNodeState.Running;
             BehaviorNodeState activeNodeState = children[activeNodeIndex].UpdateState();
 

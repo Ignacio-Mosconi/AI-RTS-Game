@@ -397,21 +397,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 710278669}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0978c51ae73a716459ab769e10cfcf51, type: 3}
+  m_Script: {fileID: 11500000, guid: 9adb688de6d995741b2b06b18388844a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   minerIdle:
-    idleTimeOut: 3
+    idleTimeOut: 2.5
   minerGoingToMine:
     targetMiningPoint: {fileID: 851043857}
   minerMining:
-    miningIntevals: 1
-    goldMinedPerInterval: 50
+    miningIntevals: 2
+    goldMinedPerInterval: 20
   minerCarryingGold:
     targetDeployPoint: {fileID: 237380198}
   minerDepositingGold:
     depositTimeOut: 1
-  maxGoldCarry: 100
+  maxGoldCarry: 75
 --- !u!136 &710278672
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1028,7 +1028,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1880284586}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0978c51ae73a716459ab769e10cfcf51, type: 3}
+  m_Script: {fileID: 11500000, guid: 9adb688de6d995741b2b06b18388844a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   minerIdle:
@@ -1312,11 +1312,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1993889288}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0978c51ae73a716459ab769e10cfcf51, type: 3}
+  m_Script: {fileID: 11500000, guid: 9adb688de6d995741b2b06b18388844a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   minerIdle:
-    idleTimeOut: 1
+    idleTimeOut: 2.5
   minerGoingToMine:
     targetMiningPoint: {fileID: 2035396266}
   minerMining:

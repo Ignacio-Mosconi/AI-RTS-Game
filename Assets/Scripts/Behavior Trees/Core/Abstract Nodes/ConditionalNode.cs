@@ -12,6 +12,8 @@ namespace GreenNacho.AI.BehaviorTrees
 
         public override BehaviorNodeState UpdateState()
         {
+            base.OnStateUpdate();
+
             return (EvaluateCondition()) ? BehaviorNodeState.Success : BehaviorNodeState.Failure; 
         }
     }

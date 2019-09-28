@@ -10,6 +10,8 @@ namespace GreenNacho.AI.BehaviorTrees
 
         public override BehaviorNodeState UpdateState()
         {
+            base.OnStateUpdate();
+
             BehaviorNodeState nodeState = BehaviorNodeState.None;
 
             switch (child.UpdateState())

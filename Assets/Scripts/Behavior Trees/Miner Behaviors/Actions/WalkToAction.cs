@@ -10,7 +10,7 @@ namespace MinerBehaviors
         T agent;
         Vector3 targetPosition;
 
-        public WalkToAction(T agent, Vector3 targetPosition, string destinationName) : base(behaviorName: "Walk To" + destinationName)
+        public WalkToAction(T agent, Vector3 targetPosition, string destinationName) : base(behaviorName: "Walk To: " + destinationName)
         {
             this.agent = agent;
             this.targetPosition = targetPosition;
@@ -18,6 +18,8 @@ namespace MinerBehaviors
 
         public override BehaviorNodeState UpdateState()
         {
+            base.OnStateUpdate();
+
             BehaviorNodeState actionState = BehaviorNodeState.Running; 
 
             agent.PathNodeAgent.SimpleMove(targetPosition);

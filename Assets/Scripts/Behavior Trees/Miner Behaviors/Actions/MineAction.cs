@@ -10,7 +10,6 @@ namespace MinerBehaviors
         float mineIntervals;
         float mineTimer;
         int resourceMinedPerInterval;
-        int resourceMined;
 
         public MineAction(T resourceCarrier, float mineIntervals, int resourceMinedPerInterval) : base(behaviorName: "Mine")
         {
@@ -22,6 +21,8 @@ namespace MinerBehaviors
 
         public override BehaviorNodeState UpdateState()
         {
+            base.OnStateUpdate();
+
             BehaviorNodeState actionState = BehaviorNodeState.Running;
 
             mineTimer += Time.deltaTime;
@@ -29,12 +30,11 @@ namespace MinerBehaviors
             if (mineTimer >= mineIntervals)
             {
                 mineTimer = 0f;
-                resourceMined += resourceMinedPerInterval;
+                resourceCarrier.AmountCarried += resourceMinedPerInterval;
 
-                if (resourceMined >= resourceCarrier.MaxCarryAmount)
+                if (resourceCarrier.AmountCarried >= resourceCarrier.MaxCarryAmount)
                 {
-                    mineTimer = 0f;
-                    resourceMined = resourceCarrier.MaxCarryAmount;
+                    resourceCarrier.AmountCarried = resourceCarrier.MaxCarryAmount;
                     actionState = BehaviorNodeState.Success;
                 }
             }

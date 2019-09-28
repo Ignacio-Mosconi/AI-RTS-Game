@@ -1,4 +1,6 @@
-﻿namespace GreenNacho.AI.BehaviorTrees
+﻿using UnityEngine;
+
+namespace GreenNacho.AI.BehaviorTrees
 {
     public enum BehaviorNodeState
     {
@@ -16,5 +18,10 @@
         }
 
         public abstract BehaviorNodeState UpdateState();
+
+        public virtual void OnStateUpdate()
+        {
+            Debug.Log(behaviorName);
+        }
     }
 }

@@ -19,6 +19,8 @@ namespace MinerBehaviors
 
         public override BehaviorNodeState UpdateState()
         {
+            base.OnStateUpdate();
+
             BehaviorNodeState actionState = BehaviorNodeState.Running;
 
             depositTimer += Time.deltaTime;
@@ -26,6 +28,7 @@ namespace MinerBehaviors
             if (depositTimer >= depositDuration)
             {
                 depositTimer = 0f;
+                resourceCarrier.AmountCarried = 0;
                 actionState = BehaviorNodeState.Success;
             }
 
