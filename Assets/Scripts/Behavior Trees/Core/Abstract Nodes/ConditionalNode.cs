@@ -5,7 +5,7 @@ namespace GreenNacho.AI.BehaviorTrees
     {
         protected abstract bool EvaluateCondition();
 
-        public override BehaviorNodeState EvaluateState()
+        public override BehaviorNodeState UpdateState()
         {
             return (EvaluateCondition()) ? BehaviorNodeState.Success : BehaviorNodeState.Failure; 
         }

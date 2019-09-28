@@ -2,13 +2,32 @@ using UnityEngine;
 
 namespace MinerBehaviors
 {
-    public class Miner : MonoBehaviour, IDamagable
+    public class Miner : MonoBehaviour, IDamagable, IResourceCarrier
     {
-        float life;
+        [SerializeField] Resource resourceCarried = Resource.Gold;
+        [SerializeField, Range(0f, 100f)] float life;
+        [SerializeField, Range(0, 100)] int maxCarryAmount;
 
-        public bool IsDead()
+        int amountCarried;
+
+        public Resource ResourceCarried
         {
-            return (life <= 0f);
+            get { return resourceCarried;}
+        }
+
+        public float Life
+        {
+            get { return life; }
+        }
+
+        public int AmountCarried
+        {
+            get { return amountCarried; }
+        }
+
+        public int MaxCarryAmount
+        {
+            get { return maxCarryAmount; }
         }
     }
 }

@@ -1,13 +1,21 @@
+using System.Collections.Generic;
+
 namespace GreenNacho.AI.BehaviorTrees
 {
     [System.Serializable]
-    public abstract class DecoratorNode : BehaviorNode
+    public abstract class DecoratorNode : BranchNode
     {
         protected BehaviorNode child;
 
-        public DecoratorNode(BehaviorNode child)
+        public override void AddChild(BehaviorNode behaviorNode)
         {
-            this.child = child;
+            if (behaviorNode != null)
+                child = behaviorNode;
+        }
+
+        public override void RemoveChild(BehaviorNode behaviorNode = null)
+        {
+            child = null;
         }
     }
 }

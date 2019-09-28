@@ -10,6 +10,6 @@
     {
         public string NodeName { get; private set; }
 
-        public abstract BehaviorNodeState EvaluateState();
+        public abstract BehaviorNodeState UpdateState();
     }
 }

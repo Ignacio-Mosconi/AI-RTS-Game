@@ -1,4 +1,4 @@
 public interface IDamagable
 {
-    bool IsDead();
+    float Life { get; }
 }

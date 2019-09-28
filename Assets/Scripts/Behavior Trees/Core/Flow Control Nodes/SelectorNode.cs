@@ -5,12 +5,7 @@ namespace GreenNacho.AI.BehaviorTrees
     [System.Serializable]
     public class SelectorNode : FlowControlNode
     {
-        public SelectorNode(List<BehaviorNode> children) : base(children)
-        {
-
-        }
-
-        public override BehaviorNodeState EvaluateState()
+        public override BehaviorNodeState UpdateState()
         {
             BehaviorNodeState nodeState = BehaviorNodeState.None;
 

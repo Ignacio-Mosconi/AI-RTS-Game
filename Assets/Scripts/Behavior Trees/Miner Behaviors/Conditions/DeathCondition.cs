@@ -15,7 +15,7 @@ namespace MinerBehaviors
 
         protected override bool EvaluateCondition()
         {
-            return damagableEntity.IsDead();
+            return (damagableEntity.Life <= 0f);
         }
     }
 }
