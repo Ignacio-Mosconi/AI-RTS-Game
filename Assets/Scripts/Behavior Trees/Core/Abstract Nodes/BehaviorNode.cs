@@ -8,7 +8,12 @@
     [System.Serializable]
     public abstract class BehaviorNode
     {
-        public string NodeName { get; private set; }
+        protected string behaviorName;
+
+        public BehaviorNode(string behaviorName)
+        {
+            this.behaviorName = behaviorName;
+        }
 
         public abstract BehaviorNodeState UpdateState();
     }

@@ -7,6 +7,11 @@ namespace GreenNacho.AI.BehaviorTrees
     {
         protected BehaviorNode child;
 
+        public DecoratorNode(string behaviorName) : base(behaviorName)
+        {
+
+        }
+
         public override void AddChild(BehaviorNode behaviorNode)
         {
             if (behaviorNode != null)

@@ -6,16 +6,16 @@ namespace MinerBehaviors
     [System.Serializable]
     public class DeathCondition<T> : ConditionalNode where T : MonoBehaviour, IDamagable
     {
-        T damagableEntity;
+        T damagable;
 
-        public DeathCondition(T damagableEntity)
+        public DeathCondition(T damagable) : base(behaviorName: "Is Dead?")
         {
-            this.damagableEntity = damagableEntity;
+            this.damagable = damagable;
         }
 
         protected override bool EvaluateCondition()
         {
-            return (damagableEntity.Life <= 0f);
+            return (damagable.Life <= 0f);
         }
     }
 }

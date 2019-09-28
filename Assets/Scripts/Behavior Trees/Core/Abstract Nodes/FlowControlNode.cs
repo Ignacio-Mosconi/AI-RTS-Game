@@ -8,7 +8,7 @@ namespace GreenNacho.AI.BehaviorTrees
         protected List<BehaviorNode> children;
         protected int activeNodeIndex;
 
-        public FlowControlNode()
+        public FlowControlNode(string behaviorName) : base(behaviorName)
         {
             children = new List<BehaviorNode>();
             activeNodeIndex = 0;

@@ -1,8 +1,13 @@
 namespace GreenNacho.AI.BehaviorTrees
 {
     [System.Serializable]
-    public abstract class ConditionalNode : BehaviorNode
+    public abstract class ConditionalNode : LeafNode
     {
+        public ConditionalNode(string behaviorName) : base(behaviorName)
+        {
+
+        }
+
         protected abstract bool EvaluateCondition();
 
         public override BehaviorNodeState UpdateState()

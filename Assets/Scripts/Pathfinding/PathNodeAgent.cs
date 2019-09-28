@@ -46,12 +46,8 @@ namespace GreenNacho.AI.Pathfinding
                 
                 HasReachedDestination = false;
             }
-            
-            
-            currentTargetPosition 
-            = currentTargetNode
-            .Position
-             + colliderHeightOffset;
+                     
+            currentTargetPosition  = currentTargetNode.Position + colliderHeightOffset;
             transform.position = Vector3.MoveTowards(currentPosition, currentTargetPosition, maxDistanceDelta);
             
             if (transform.position == currentTargetPosition)
@@ -62,32 +58,28 @@ namespace GreenNacho.AI.Pathfinding
                     HasReachedDestination = true;
             }
         }
-
-        public float MovementSpeed
-        {
-            get { return movementSpeed; }
-        }
         
         void OnDrawGizmos()
         {
-            if(path != null && path.Count > 0)
+            if (path != null && path.Count > 0)
             {
                 PathNode[] nodes = path.ToArray();
 
                 Gizmos.color = Color.yellow;
 
-                Gizmos.DrawLine(this.transform.position+Vector3.up, currentTargetNode.Position+Vector3.up);
+                Gizmos.DrawLine(this.transform.position + Vector3.up, currentTargetNode.Position + Vector3.up);
                 
-                if(currentTargetNode != null)
-                    Gizmos.DrawLine(currentTargetNode.Position+Vector3.up, nodes[0].Position+Vector3.up);
+                if (currentTargetNode != null)
+                    Gizmos.DrawLine(currentTargetNode.Position + Vector3.up, nodes[0].Position + Vector3.up);
                 
-                for (int i = 0; i < nodes.Length-1; i++)
-                {
-                    Gizmos.DrawLine(nodes[i].Position+Vector3.up, nodes[i + 1].Position+Vector3.up);
-                }
+                for (int i = 0; i < nodes.Length - 1; i++)
+                    Gizmos.DrawLine(nodes[i].Position+Vector3.up, nodes[i + 1].Position + Vector3.up);
             }
         }
-    }
 
-    
+        public float MovementSpeed
+        {
+            get { return movementSpeed; }
+        }
+    }   
 }

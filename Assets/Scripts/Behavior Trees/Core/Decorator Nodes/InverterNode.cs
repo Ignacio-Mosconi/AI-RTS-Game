@@ -3,6 +3,11 @@ namespace GreenNacho.AI.BehaviorTrees
     [System.Serializable]
     public class InverterNode : DecoratorNode
     {
+        public InverterNode() : base(behaviorName: "Inverter")
+        {
+
+        }
+
         public override BehaviorNodeState UpdateState()
         {
             BehaviorNodeState nodeState = BehaviorNodeState.None;
