@@ -50,17 +50,17 @@ namespace MinerBehaviors
             ConditionalNode isDead = new DeathCondition<Miner>(this);
             isDeadInverter.AddChild(isDead);
 
-            SequenceNode mainSequence = new SequenceNode("Main"); 
-            rootSequence.AddChild(mainSequence);
+            SelectorNode mainSelector = new SelectorNode("Main"); 
+            rootSequence.AddChild(mainSelector);
 
             SequenceNode miningSequence = new SequenceNode("Mining");
-            mainSequence.AddChild(miningSequence);
+            mainSelector.AddChild(miningSequence);
             
             SequenceNode depositingSequence = new SequenceNode("Depositing");
-            mainSequence.AddChild(depositingSequence);
+            mainSelector.AddChild(depositingSequence);
 
             InverterNode isBagFullInverter = new InverterNode();
-            miningSequence.AddChild(isDeadInverter);
+            miningSequence.AddChild(isBagFullInverter);
 
             ConditionalNode isBagFull = new BagFullCondition<Miner>(this);
             isBagFullInverter.AddChild(isBagFull);
