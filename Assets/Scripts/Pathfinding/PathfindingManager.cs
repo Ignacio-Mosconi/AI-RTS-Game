@@ -198,8 +198,7 @@ namespace GreenNacho.AI.Pathfinding
                 node = node.Parent;
             }
 
-             //theta-star
-            while(!pathFinished)
+            while (!pathFinished)
             {
                 diff = (castNode.Position - auxNode.Position) + Vector3.up * 0.5f;
                 if (auxNode.Child != castNode && Physics.Raycast(castNode.Position + Vector3.up * 0.5f, diff.normalized, diff.magnitude))
