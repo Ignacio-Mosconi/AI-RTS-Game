@@ -20,7 +20,10 @@ namespace GreenNacho.AI.Flocking
             else
                 alignmentVector = boid.transform.forward;
 
-            ClampVectorToWeight(ref alignmentVector);
+            float angleBetweenDirs = Vector3.Angle(boid.transform.forward, alignmentVector);
+            float dynamicWeight = Mathf.Clamp01(angleBetweenDirs / 180f);
+
+            alignmentVector *= staticWeight * dynamicWeight;
 
             return alignmentVector;
         }

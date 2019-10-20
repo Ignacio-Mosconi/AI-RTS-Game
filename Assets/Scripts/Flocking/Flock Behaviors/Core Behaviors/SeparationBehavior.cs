@@ -23,9 +23,9 @@ namespace GreenNacho.AI.Flocking
             }
 
             if (avoidanceCount > 0)
-                separationVector /= neighbors.Count;
+                separationVector /= avoidanceCount;
 
-            ClampVectorToWeight(ref separationVector);
+            separationVector *= staticWeight;
 
             return separationVector;
         }

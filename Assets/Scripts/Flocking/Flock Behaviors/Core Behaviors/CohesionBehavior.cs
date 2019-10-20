@@ -18,7 +18,10 @@ namespace GreenNacho.AI.Flocking
                 cohesionVector = (cohesionVector / neighbors.Count) - boid.transform.position;
             }
 
-            ClampVectorToWeight(ref cohesionVector);
+            float angleBetweenDirs = Vector3.Angle(boid.transform.forward, cohesionVector);
+            float dynamicWeight = Mathf.Clamp01(angleBetweenDirs / 180f);
+
+            cohesionVector *= staticWeight * dynamicWeight;
 
             return cohesionVector;
         }

@@ -143,21 +143,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flockBehavior:
     alignmentBehavior:
-      weight: 1
+      staticWeight: 1
     cohesionBehavior:
-      weight: 1
+      staticWeight: 1
     separationBehavior:
-      weight: 1
+      staticWeight: 1
     followTargetBehavior:
-      weight: 1
+      staticWeight: 1
       target: {fileID: 1540948125}
   boidPrefab: {fileID: 6023801768503979486, guid: 0c358da917c57144c8a62b25ed90577e,
     type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
-  numberOfBoids: 50
-  boidsDensity: 2
-  boidsSpeed: 5
-  maxBoidSpeed: 5
+  numberOfBoids: 100
+  boidsDensity: 5
+  boidsSpeed: 10
+  maxBoidSpeed: 100
   neighborRadius: 5
   separationRadiusPerc: 1
 --- !u!4 &594555815

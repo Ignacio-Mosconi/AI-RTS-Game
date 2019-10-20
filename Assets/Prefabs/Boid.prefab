@@ -106,9 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ffad6186d397c444a364b669d372cc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  neighborRadius: 75
-  steeringSpeed: 5
-  movementSpeed: 3
+  steerSmoothTime: 1
 --- !u!1 &7264089015188278890
 GameObject:
   m_ObjectHideFlags: 0
