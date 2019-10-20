@@ -5,7 +5,7 @@ namespace GreenNacho.AI.Flocking
 {
     public class Flock : MonoBehaviour
     {
-        [SerializeField] FlockCompositeBehavior flockBehavior = default;
+        [SerializeField] FlockFollowTargetBehavior flockBehavior = default;
         [SerializeField] GameObject boidPrefab = default;
         [SerializeField] Vector3 spawnPoint = Vector3.zero;
         [SerializeField, Range(0, 100)] int numberOfBoids = 10;

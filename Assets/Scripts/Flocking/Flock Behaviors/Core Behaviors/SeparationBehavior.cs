@@ -6,11 +6,6 @@ namespace GreenNacho.AI.Flocking
     [System.Serializable]
     public class SeparationBehavior : FlockBehavior
     {
-        public SeparationBehavior(Flock flock) : base(flock)
-        {
-
-        }
-
         public override Vector3 ComputeVector(Boid boid, List<Boid> neighbors)
         {
             Vector3 separationVector = Vector3.zero;
@@ -18,7 +13,7 @@ namespace GreenNacho.AI.Flocking
 
             foreach (Boid b in neighbors)
             {
-                Vector3 diff = b.transform.position - boid.transform.position;
+                Vector3 diff = boid.transform.position - b.transform.position;
 
                 if (diff.sqrMagnitude <= flock.SeparationRadiusSquared)
                 {
@@ -29,6 +24,8 @@ namespace GreenNacho.AI.Flocking
 
             if (avoidanceCount > 0)
                 separationVector /= neighbors.Count;
+
+            ClampVectorToWeight(ref separationVector);
 
             return separationVector;
         }

@@ -6,11 +6,6 @@ namespace GreenNacho.AI.Flocking
     [System.Serializable]
     public class CohesionBehavior : FlockBehavior
     {
-        public CohesionBehavior(Flock flock) : base(flock)
-        {
-
-        }
-
         public override Vector3 ComputeVector(Boid boid, List<Boid> neighbors)
         {
             Vector3 cohesionVector = Vector3.zero;
@@ -22,6 +17,8 @@ namespace GreenNacho.AI.Flocking
 
                 cohesionVector = (cohesionVector / neighbors.Count) - boid.transform.position;
             }
+
+            ClampVectorToWeight(ref cohesionVector);
 
             return cohesionVector;
         }

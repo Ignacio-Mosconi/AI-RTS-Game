@@ -6,11 +6,6 @@ namespace GreenNacho.AI.Flocking
     [System.Serializable]
     public class AlignmentBehavior : FlockBehavior
     {
-        public AlignmentBehavior(Flock flock) : base(flock)
-        {
-
-        }
-
         public override Vector3 ComputeVector(Boid boid, List<Boid> neighbors)
         {
             Vector3 alignmentVector = Vector3.zero;
@@ -24,6 +19,8 @@ namespace GreenNacho.AI.Flocking
             }
             else
                 alignmentVector = boid.transform.forward;
+
+            ClampVectorToWeight(ref alignmentVector);
 
             return alignmentVector;
         }
