@@ -36,7 +36,7 @@ namespace GreenNacho.AI.NeuralNetworking
         #endregion
         
         [Header("Simulation Agent Prefab")]
-        [SerializeField] GameObject agentPrefab;
+        [SerializeField] GameObject agentPrefab = default;
 
         [Header("Scene Set Up")]
         [SerializeField] Vector3 sceneHalfExtents = new Vector3(20f, 0f, 20f);
@@ -45,7 +45,7 @@ namespace GreenNacho.AI.NeuralNetworking
         [SerializeField, Range(5f, 60f)] float generationDuration = 20f;
         [SerializeField, Range(0f, 1f)] float percentageOfElites = 0.1f;
         [SerializeField, Range(0f, 1f)] float mutationProbability = 0.1f;
-        [SerializeField, Range(0f, 1f)] float mutationIntensity = 0.01f;
+        [SerializeField, Range(0f, 1f)] float mutationIntensity = 0.1f;
         [SerializeField, Range(0, 100)] int populationAmount = 40;
         [SerializeField, Range(0, 100)] int iterationsPerUpdate = 1;
 
@@ -110,22 +110,20 @@ namespace GreenNacho.AI.NeuralNetworking
             float bestFitness = 0;
             
             foreach (Genome genome in geneticAlgorithm.CurrentGeneration)
-            {
-                if (bestFitness < genome.Fitness)
+                if (genome.Fitness > bestFitness)
                     bestFitness = genome.Fitness;
-            }
 
             return bestFitness;
         }
 
         float GetAverageFitness()
         {
-            float averageFitness = 0;
+            float totalFitness = 0;
 
             foreach (Genome genome in geneticAlgorithm.CurrentGeneration)
-                averageFitness += genome.Fitness;
+                totalFitness += genome.Fitness;
 
-            return (averageFitness / geneticAlgorithm.CurrentGeneration.Count);
+            return (totalFitness / geneticAlgorithm.CurrentGeneration.Count);
         }
 
         float GetWorstFitness()
@@ -133,7 +131,7 @@ namespace GreenNacho.AI.NeuralNetworking
             float worstFitness = float.MaxValue;
             
             foreach (Genome genome in geneticAlgorithm.CurrentGeneration)
-                if (worstFitness > genome.Fitness)
+                if (genome.Fitness < worstFitness)
                     worstFitness = genome.Fitness;
 
             return worstFitness;
@@ -189,17 +187,17 @@ namespace GreenNacho.AI.NeuralNetworking
         {
             Vector3 position = agent.transform.position;
 
-            if (position.x > sceneHalfExtents.x)
+            if (position.x > transform.position.x + sceneHalfExtents.x)
                 position.x -= sceneHalfExtents.x * 2f;
             else
-                if (position.x < -sceneHalfExtents.x)
-                position.x += sceneHalfExtents.x * 2f;
+                if (position.x < transform.position.x - sceneHalfExtents.x)
+                    position.x += sceneHalfExtents.x * 2f;
 
-            if (position.z > sceneHalfExtents.z)
+            if (position.z > transform.position.x + sceneHalfExtents.z)
                 position.z -= sceneHalfExtents.z * 2f;
             else
-                if (position.z < -sceneHalfExtents.z)
-                position.z += sceneHalfExtents.z * 2f;
+                if (position.z < transform.position.x - sceneHalfExtents.z)
+                    position.z += sceneHalfExtents.z * 2f;
 
             agent.transform.position = position;
         }
@@ -237,8 +235,8 @@ namespace GreenNacho.AI.NeuralNetworking
 
         protected Vector3 GetRandomPosition()
         {
-            return new Vector3(Random.value * sceneHalfExtents.x * 2f - sceneHalfExtents.x, 0f, 
-                                Random.value * sceneHalfExtents.z * 2f - sceneHalfExtents.z);
+            return new Vector3(Random.value * transform.position.x + sceneHalfExtents.x * 2f - sceneHalfExtents.x, 0f, 
+                                Random.value * transform.position.z + sceneHalfExtents.z * 2f - sceneHalfExtents.z);
         }
 
         protected Quaternion GetRandomRotation()

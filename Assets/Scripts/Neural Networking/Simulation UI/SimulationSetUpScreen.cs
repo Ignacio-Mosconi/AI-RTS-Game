@@ -43,11 +43,11 @@ public class SimulationSetUpScreen : MonoBehaviour
 
     [Header("Simulation Start")]
     [SerializeField] Button startButton = default;
-    [SerializeField] GameObject simulationScreen = default;
+    [SerializeField] SimulationInfoScreen simulationInfoScreen = default;
 
-    string[] neuralNetworkSettings;
-    string[] simulationSettings;
-    string[] minerTanksSimulationSettings;
+    string[] neuralNetworkSettings = new string[(int)NeuralNetworkSetting.Count];
+    string[] simulationSettings = new string[(int)SimulationSetting.Count];
+    string[] minerTanksSimulationSettings = new string[(int)MinerTanksSimulationSetting.Count];
 
     void OnValidate()
     {
@@ -62,12 +62,32 @@ public class SimulationSetUpScreen : MonoBehaviour
     void Start()
     {
         for (int i = 0; i < (int)NeuralNetworkSetting.Count; i++)
-            neuralNetworkSettingsSliders[i].onValueChanged.AddListener((value) => OnNeuralNetworkSettingChange((NeuralNetworkSetting)i, value));
+        {
+            NeuralNetworkSetting neuralNetworkSetting = (NeuralNetworkSetting)i;
+
+            neuralNetworkSettings[i] = neuralNetworkSettingsTexts[i].text;
+            neuralNetworkSettingsSliders[i].onValueChanged.AddListener((value) => OnNeuralNetworkSettingChange(neuralNetworkSetting, value));
+            OnNeuralNetworkSettingChange(neuralNetworkSetting, neuralNetworkSettingsSliders[i].value);
+        }
+        
         for (int i = 0; i < (int)SimulationSetting.Count; i++)
-            simulationSettingsSliders[i].onValueChanged.AddListener((value) => OnSimulationSettingChange((SimulationSetting)i, value));
+        {
+            SimulationSetting simulationSetting = (SimulationSetting)i;
+
+            simulationSettings[i] = simulationSettingsTexts[i].text;
+            simulationSettingsSliders[i].onValueChanged.AddListener((value) => OnSimulationSettingChange(simulationSetting, value));
+            OnSimulationSettingChange(simulationSetting, simulationSettingsSliders[i].value);
+        }
+        
         for (int i = 0; i < (int)MinerTanksSimulationSetting.Count; i++)
+        {
+            MinerTanksSimulationSetting minerTanksSimulationSetting = (MinerTanksSimulationSetting)i;
+
+            minerTanksSimulationSettings[i] = minerTanksSimulationSettingTexts[i].text;
             minerTanksSimulationSettingsSliders[i].onValueChanged.AddListener((value) => 
-                                                                    OnMinerTanksSimulationSettingChange((MinerTanksSimulationSetting)i, value));        
+                                                                    OnMinerTanksSimulationSettingChange(minerTanksSimulationSetting, value));
+            OnMinerTanksSimulationSettingChange(minerTanksSimulationSetting, minerTanksSimulationSettingsSliders[i].value);
+        }
 
         startButton.onClick.AddListener(OnStartButtonClick);
     }
@@ -79,19 +99,19 @@ public class SimulationSetUpScreen : MonoBehaviour
         switch (neuralNetworkSetting)
         {
             case NeuralNetworkSetting.NumberOfHiddenLayers:
-                SimulationManager.Instance.MutationProbability = value;
+                SimulationManager.Instance.HiddenLayers = (int)value;
                 break;
 
             case NeuralNetworkSetting.NeuronsPerHiddenLayer:
-                SimulationManager.Instance.PercentageOfElites = value;
+                SimulationManager.Instance.NeuronsPerHiddenLayer = (int)value;
                 break;
 
             case NeuralNetworkSetting.Bias:
-                SimulationManager.Instance.GenerationDuration = value;
+                SimulationManager.Instance.Bias = value;
                 break;
 
             case NeuralNetworkSetting.Slope:
-                SimulationManager.Instance.MutationIntensity = value;
+                SimulationManager.Instance.Slope = value;
                 break;
         }
 
@@ -139,7 +159,7 @@ public class SimulationSetUpScreen : MonoBehaviour
                 break;
         }
 
-        simulationSettingsTexts[index].text = String.Format(simulationSettings[index], value);
+        minerTanksSimulationSettingTexts[index].text = String.Format(minerTanksSimulationSettings[index], value);
     }
 
 
@@ -147,6 +167,6 @@ public class SimulationSetUpScreen : MonoBehaviour
     {
         SimulationManager.Instance.StartSimulation();
         gameObject.SetActive(false);
-        simulationScreen.SetActive(true);
+        simulationInfoScreen.gameObject.SetActive(true);
     }
 }

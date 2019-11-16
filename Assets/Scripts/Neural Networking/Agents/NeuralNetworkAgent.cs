@@ -11,7 +11,7 @@ namespace GreenNacho.AI.NeuralNetworking
 
         void ResetFitness()
         {
-            genome.Fitness = 0;
+            genome.Fitness = 1f;
         }
 
         public void SetNeuralNetwork(Genome genome, NeuralNetwork neuralNetwork)

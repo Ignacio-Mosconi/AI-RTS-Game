@@ -2,18 +2,19 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using GreenNacho.AI.NeuralNetworking;
+using TMPro;
 
-public class SimulationScreen : MonoBehaviour
+public class SimulationInfoScreen : MonoBehaviour
 {
-    [SerializeField] Text generationsText;
-    [SerializeField] Text bestFitnessText;
-    [SerializeField] Text averageFitnessText;
-    [SerializeField] Text worstFitnessText;
-    [SerializeField] Text timerText;
-    [SerializeField] Slider timerSlider;
-    [SerializeField] Button pauseButton;
-    [SerializeField] Button stopButton;
-    [SerializeField] GameObject startConfigurationScreen;
+    [SerializeField] TMP_Text generationsText = default;
+    [SerializeField] TMP_Text bestFitnessText = default;
+    [SerializeField] TMP_Text averageFitnessText = default;
+    [SerializeField] TMP_Text worstFitnessText = default;
+    [SerializeField] TMP_Text timeScaleText = default;
+    [SerializeField] Slider timeScaleSlider = default;
+    [SerializeField] Button pauseButton = default;
+    [SerializeField] Button stopButton = default;
+    [SerializeField] SimulationSetUpScreen simulationSetUpScreen = default;
 
     string generationsString;
     string bestFitnessString;
@@ -24,15 +25,15 @@ public class SimulationScreen : MonoBehaviour
 
     void Start()
     {
-        timerSlider.onValueChanged.AddListener(OnTimerChange);
+        timeScaleSlider.onValueChanged.AddListener(OnTimerChange);
         pauseButton.onClick.AddListener(OnPauseButtonClick);
         stopButton.onClick.AddListener(OnStopButtonClick);
     }
 
     void OnEnable()
     {
-        timerString = timerText.text;
-        timerText.text = String.Format(timerString, SimulationManager.Instance.IterationsPerUpdate);
+        timerString = timeScaleText.text;
+        timeScaleText.text = String.Format(timerString, SimulationManager.Instance.IterationsPerUpdate);
 
         if (String.IsNullOrEmpty(generationsString))
             generationsString = generationsText.text;
@@ -52,7 +53,7 @@ public class SimulationScreen : MonoBehaviour
     void OnTimerChange(float value)
     {
         SimulationManager.Instance.IterationsPerUpdate = (int)value;
-        timerText.text = string.Format(timerString, SimulationManager.Instance.IterationsPerUpdate);
+        timeScaleText.text = string.Format(timerString, SimulationManager.Instance.IterationsPerUpdate);
     }
 
     void OnPauseButtonClick()
@@ -64,7 +65,7 @@ public class SimulationScreen : MonoBehaviour
     {
         SimulationManager.Instance.StopSimulation();
         gameObject.SetActive(false);
-        startConfigurationScreen.SetActive(true);
+        simulationSetUpScreen.gameObject.SetActive(true);
         lastGeneration = 0;
     }
 

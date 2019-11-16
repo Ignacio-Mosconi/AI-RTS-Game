@@ -10,9 +10,10 @@ namespace GreenNacho.AI.NeuralNetworking
         protected void Move(float leftTrackForce, float rightTrackForce)
         {
             float rotationFactor = Mathf.Sign((rightTrackForce - leftTrackForce));
+            float advanceFactor = Mathf.Abs(rightTrackForce + leftTrackForce) * 0.5f;
 
             transform.rotation *= Quaternion.AngleAxis(rotationFactor * rotationSpeed * Time.fixedDeltaTime, Vector3.up);
-            transform.position += transform.forward * Mathf.Abs(rightTrackForce + leftTrackForce) * 0.5f * movementSpeed * Time.fixedDeltaTime;
+            transform.position += transform.forward * advanceFactor * movementSpeed * Time.fixedDeltaTime;
         }
     }
 }
