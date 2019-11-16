@@ -11,13 +11,9 @@ namespace GreenNacho.AI.NeuralNetworking
 
         public Neuron(int numberOfWeights, float bias, float slope)
         {
+            Weights = new float[numberOfWeights];
             this.bias = bias;
             this.slope = slope;
-
-            Weights = new float[numberOfWeights];
-
-            for (int i = 0; i < Weights.Length; i++)
-                Weights[i] = Random.Range(-1.0f, 1.0f);
         }
 
         float GetSigmoid(float activation)
@@ -25,12 +21,12 @@ namespace GreenNacho.AI.NeuralNetworking
             return (1.0f / (1.0f + Mathf.Exp(-activation / slope)));
         }
 
-        public float DoSynapsis(float[] input)
+        public float DoSynapsis(float[] inputs)
         {
             float activation = 0;
 
-            for (int i = 0; i < input.Length; i++)
-                activation += Weights[i] * input[i];
+            for (int i = 0; i < inputs.Length; i++)
+                activation += Weights[i] * inputs[i];
 
             activation += bias * Weights[Weights.Length - 1];
 
