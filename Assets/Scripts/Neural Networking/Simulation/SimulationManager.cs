@@ -41,7 +41,7 @@ namespace GreenNacho.AI.NeuralNetworking
         [Header("Scene Set Up")]
         [SerializeField] Vector3 sceneHalfExtents = new Vector3(20f, 0f, 20f);
 
-        [Header("Simulation Properties")]
+        [Header("Simulation Settings")]
         [SerializeField, Range(5f, 60f)] float generationDuration = 20f;
         [SerializeField, Range(0f, 1f)] float percentageOfElites = 0.1f;
         [SerializeField, Range(0f, 1f)] float mutationProbability = 0.1f;
@@ -56,6 +56,17 @@ namespace GreenNacho.AI.NeuralNetworking
         [SerializeField, Range(0, 100)] int neuronsPerHiddenLayer = 7;
         [SerializeField, Range(-10f, 0f)] float bias = -1f;
         [SerializeField, Range(0f, 1f)] float slope = 0.5f;
+
+        public float GenerationDuration { set { generationDuration = value; } }
+        public float PercentageOfElites { set { percentageOfElites = value; } }
+        public float MutationProbability { set { mutationProbability = value; } }
+        public float MutationIntensity { set { mutationIntensity = value; } }
+        public int PopulationAmount { set { populationAmount = value; } }
+        public int HiddenLayers { set { hiddenLayers = value; } }
+        public int NeuronsPerHiddenLayer { set { neuronsPerHiddenLayer = value; } }
+        public float Bias { set { bias = value; } }
+        public float Slope { set { slope = value; } }
+        public int IterationsPerUpdate { get { return iterationsPerUpdate; } set { iterationsPerUpdate = value; } }
 
         GeneticAlgorithm geneticAlgorithm;
 

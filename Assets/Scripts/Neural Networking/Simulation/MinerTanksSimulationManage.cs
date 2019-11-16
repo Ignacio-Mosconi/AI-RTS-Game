@@ -29,6 +29,8 @@ namespace GreenNacho.AI.NeuralNetworking
         [SerializeField] GameObject minePrefab;
         [SerializeField, Range(0, 100)] int numberOfMines = 50;
 
+        public int NumberOfMines { get; set; }
+
         List<GameObject> mines = new List<GameObject>();
 
         void CreateMines()
