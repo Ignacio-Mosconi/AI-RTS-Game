@@ -41,36 +41,24 @@ namespace GreenNacho.AI.NeuralNetworking
         [Header("Scene Set Up")]
         [SerializeField] Vector3 sceneHalfExtents = new Vector3(20f, 0f, 20f);
 
-        [Header("Simulation Settings")]
-        [SerializeField, Range(5f, 60f)] float generationDuration = 20f;
-        [SerializeField, Range(0f, 1f)] float percentageOfElites = 0.1f;
-        [SerializeField, Range(0f, 1f)] float mutationProbability = 0.1f;
-        [SerializeField, Range(0f, 1f)] float mutationIntensity = 0.1f;
-        [SerializeField, Range(0, 100)] int populationAmount = 40;
-        [SerializeField, Range(0, 100)] int iterationsPerUpdate = 1;
-
-        [Header("Neural Network Properties")]
+        [Header("Basic Neural Network Properties")]
         [SerializeField, Range(0, 100)] int inputs = 4;
-        [SerializeField, Range(0, 100)] int hiddenLayers = 1;
         [SerializeField, Range(0, 100)] int outputs = 2;
-        [SerializeField, Range(0, 100)] int neuronsPerHiddenLayer = 7;
-        [SerializeField, Range(-10f, 0f)] float bias = -1f;
-        [SerializeField, Range(0f, 1f)] float slope = 0.5f;
 
-        public float GenerationDuration { set { generationDuration = value; } }
-        public float PercentageOfElites { set { percentageOfElites = value; } }
-        public float MutationProbability { set { mutationProbability = value; } }
-        public float MutationIntensity { set { mutationIntensity = value; } }
-        public int PopulationAmount { set { populationAmount = value; } }
-        public int HiddenLayers { set { hiddenLayers = value; } }
-        public int NeuronsPerHiddenLayer { set { neuronsPerHiddenLayer = value; } }
-        public float Bias { set { bias = value; } }
-        public float Slope { set { slope = value; } }
-        public int IterationsPerUpdate { get { return iterationsPerUpdate; } set { iterationsPerUpdate = value; } }
+        public float GenerationDuration { get; set; } = 20f;
+        public float PercentageOfElites { get; set; } = 0.1f;
+        public float MutationProbability { get; set; } = 0.1f;
+        public float MutationIntensity { get; set; } = 0.1f;
+        public int PopulationAmount { get; set; } = 40;
+        public int HiddenLayers { get; set; } = 1;
+        public int NeuronsPerHiddenLayer { get; set; } = 7;
+        public float Bias { get; set; } = -1f;
+        public float Slope { get; set; } = 0.5f;
+        public int IterationsPerUpdate { get; set; } = 1;
 
         GeneticAlgorithm geneticAlgorithm;
 
-        List<NeuralNetworkAgent> populationAgents = new List<NeuralNetworkAgent>();
+        protected List<NeuralNetworkAgent> populationAgents = new List<NeuralNetworkAgent>();
         List<NeuralNetwork> neuralNetworks = new List<NeuralNetwork>();
 
         public int Generation { get; private set; }
@@ -86,7 +74,7 @@ namespace GreenNacho.AI.NeuralNetworking
             if (!isRunning)
                 return;
 
-            for (int i = 0; i < iterationsPerUpdate; i++)
+            for (int i = 0; i < IterationsPerUpdate; i++)
             {
                 foreach (NeuralNetworkAgent agent in populationAgents)
                 {
@@ -96,9 +84,9 @@ namespace GreenNacho.AI.NeuralNetworking
 
                 timer += Time.fixedDeltaTime;
 
-                if (timer >= generationDuration)
+                if (timer >= GenerationDuration)
                 {
-                    timer -= generationDuration;
+                    timer -= GenerationDuration;
                     GenerateNewGeneration();
                     break;
                 }
@@ -139,14 +127,14 @@ namespace GreenNacho.AI.NeuralNetworking
 
         NeuralNetwork CreateNeuralNetwork()
         {
-            NeuralNetwork neuralNetwork = new NeuralNetwork(bias, slope);
+            NeuralNetwork neuralNetwork = new NeuralNetwork(Bias, Slope);
 
-            neuralNetwork.AddInputLayer(inputs, bias, slope);
+            neuralNetwork.AddInputLayer(inputs, Bias, Slope);
 
-            for (int i = 0; i < hiddenLayers; i++)
-                neuralNetwork.AddLayer(neuronsPerHiddenLayer, bias, slope);
+            for (int i = 0; i < HiddenLayers; i++)
+                neuralNetwork.AddLayer(NeuronsPerHiddenLayer, Bias, Slope);
 
-            neuralNetwork.AddLayer(outputs, bias, slope);
+            neuralNetwork.AddLayer(outputs, Bias, Slope);
 
             return neuralNetwork;
         }
@@ -171,7 +159,7 @@ namespace GreenNacho.AI.NeuralNetworking
 
             geneticAlgorithm.UpdateGeneration();
 
-            for (int i = 0; i < populationAmount; i++)
+            for (int i = 0; i < PopulationAmount; i++)
             {
                 NeuralNetwork neuralNetwork = neuralNetworks[i];
 
@@ -208,7 +196,7 @@ namespace GreenNacho.AI.NeuralNetworking
 
             DestroyAgents();
 
-            for (int i = 0; i < populationAmount; i++)
+            for (int i = 0; i < PopulationAmount; i++)
             {
                 NeuralNetwork neuralNetwork = CreateNeuralNetwork();
 
@@ -245,12 +233,12 @@ namespace GreenNacho.AI.NeuralNetworking
         }
 
         protected abstract void OnSimulationAgentUpdate(NeuralNetworkAgent agent);
-        protected abstract void OnStartSimulation();
-        protected abstract void OnStopSimulation();
+        protected virtual void OnStartSimulation() {}
+        protected virtual void OnStopSimulation() {}
 
         public void StartSimulation()
         {
-            geneticAlgorithm = new GeneticAlgorithm(percentageOfElites, mutationProbability, mutationIntensity);
+            geneticAlgorithm = new GeneticAlgorithm(PercentageOfElites, MutationProbability, MutationIntensity);
 
             GenerateInitialPopulation();
             OnStartSimulation();

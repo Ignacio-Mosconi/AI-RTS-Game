@@ -76,7 +76,7 @@ public class SimulationInfoScreen : MonoBehaviour
             lastGeneration = SimulationManager.Instance.Generation;
             generationsText.text = String.Format(generationsString, SimulationManager.Instance.Generation);
             bestFitnessText.text = String.Format(bestFitnessString, SimulationManager.Instance.BestFitness);
-            averageFitnessText.text = String.Format(averageFitnessString, SimulationManager.Instance.AverageFitness);
+            averageFitnessText.text = String.Format(averageFitnessString, (int)SimulationManager.Instance.AverageFitness);
             worstFitnessText.text = String.Format(worstFitnessString, SimulationManager.Instance.WorstFitness);
         }
     }

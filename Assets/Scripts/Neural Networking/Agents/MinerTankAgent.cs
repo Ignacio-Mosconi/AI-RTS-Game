@@ -19,6 +19,11 @@ namespace GreenNacho.AI.NeuralNetworking
             return (transform.position - NearestMine.transform.position).sqrMagnitude <= CloseMineSqrDistance;
         }
 
+        protected override void IncreaseFitness()
+        {
+            genome.Fitness *= FitnessMultiplier;
+        }
+
         public override void Think()
         {
             Vector3 currentDirection = transform.forward;
@@ -35,15 +40,9 @@ namespace GreenNacho.AI.NeuralNetworking
 
             if (IsCloseToNearestMine())
             {
-                TakeMine();
+                IncreaseFitness();
                 MinerTanksSimulationManager.Instance.RelocateMine(NearestMine);
             }
         }
-
-        void TakeMine()
-        {
-            genome.Fitness *= FitnessMultiplier;
-        }
     }
-
 }

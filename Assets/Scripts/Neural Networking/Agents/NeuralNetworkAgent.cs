@@ -23,6 +23,17 @@ namespace GreenNacho.AI.NeuralNetworking
             ResetFitness();
         }
 
+        protected virtual void IncreaseFitness()
+        {
+            genome.Fitness++;
+        }
+        
+        protected virtual void DecreaseFitness() 
+        {
+            if (genome.Fitness > 1)
+                genome.Fitness--;
+        }
+        
         public abstract void Think();
     }
 }

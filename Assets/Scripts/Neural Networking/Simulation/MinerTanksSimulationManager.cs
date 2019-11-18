@@ -27,7 +27,6 @@ namespace GreenNacho.AI.NeuralNetworking
 
         [Header("Mines Properties")]
         [SerializeField] GameObject minePrefab = default;
-        [SerializeField, Range(0, 100)] int numberOfMines = 50;
 
         public int NumberOfMines { get; set; }
 
@@ -37,7 +36,7 @@ namespace GreenNacho.AI.NeuralNetworking
         {
             DestroyMines();
 
-            for (int i = 0; i < numberOfMines; i++)
+            for (int i = 0; i < NumberOfMines; i++)
             {
                 Vector3 position = GetRandomPosition();
                 GameObject go = Instantiate(minePrefab, position, Quaternion.identity);

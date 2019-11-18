@@ -34,20 +34,17 @@ public class SimulationSetUpScreen : MonoBehaviour
     [Header("Settings Texts")]
     [SerializeField] TMP_Text[] neuralNetworkSettingsTexts = new TMP_Text[(int)NeuralNetworkSetting.Count];
     [SerializeField] TMP_Text[] simulationSettingsTexts = new TMP_Text[(int)SimulationSetting.Count];
-    [SerializeField] TMP_Text[] minerTanksSimulationSettingTexts = new TMP_Text[(int)MinerTanksSimulationSetting.Count];
 
     [Header("Settings Sliders")]
     [SerializeField] Slider[] neuralNetworkSettingsSliders = new Slider[(int)SimulationSetting.Count];
     [SerializeField] Slider[] simulationSettingsSliders = new Slider[(int)SimulationSetting.Count];
-    [SerializeField] Slider[] minerTanksSimulationSettingsSliders = new Slider[(int)SimulationSetting.Count];
 
     [Header("Simulation Start")]
     [SerializeField] Button startButton = default;
     [SerializeField] SimulationInfoScreen simulationInfoScreen = default;
 
-    string[] neuralNetworkSettings = new string[(int)NeuralNetworkSetting.Count];
-    string[] simulationSettings = new string[(int)SimulationSetting.Count];
-    string[] minerTanksSimulationSettings = new string[(int)MinerTanksSimulationSetting.Count];
+    string[] neuralNetworkSettingsStrings = new string[(int)NeuralNetworkSetting.Count];
+    string[] simulationSettingsStrings = new string[(int)SimulationSetting.Count];
 
     void OnValidate()
     {
@@ -55,41 +52,38 @@ public class SimulationSetUpScreen : MonoBehaviour
         Array.Resize(ref neuralNetworkSettingsSliders, (int)NeuralNetworkSetting.Count);
         Array.Resize(ref simulationSettingsTexts, (int)SimulationSetting.Count);
         Array.Resize(ref simulationSettingsSliders, (int)SimulationSetting.Count);
-        Array.Resize(ref minerTanksSimulationSettingTexts, (int)MinerTanksSimulationSetting.Count);
-        Array.Resize(ref minerTanksSimulationSettingsSliders, (int)MinerTanksSimulationSetting.Count);
     }
 
     void Start()
+    {
+        OnStart();
+        startButton.onClick.AddListener(OnStartButtonClick);
+    }
+
+    protected virtual void OnStart()
     {
         for (int i = 0; i < (int)NeuralNetworkSetting.Count; i++)
         {
             NeuralNetworkSetting neuralNetworkSetting = (NeuralNetworkSetting)i;
 
-            neuralNetworkSettings[i] = neuralNetworkSettingsTexts[i].text;
+            neuralNetworkSettingsStrings[i] = neuralNetworkSettingsTexts[i].text;
             neuralNetworkSettingsSliders[i].onValueChanged.AddListener((value) => OnNeuralNetworkSettingChange(neuralNetworkSetting, value));
             OnNeuralNetworkSettingChange(neuralNetworkSetting, neuralNetworkSettingsSliders[i].value);
         }
-        
+
         for (int i = 0; i < (int)SimulationSetting.Count; i++)
         {
             SimulationSetting simulationSetting = (SimulationSetting)i;
 
-            simulationSettings[i] = simulationSettingsTexts[i].text;
+            simulationSettingsStrings[i] = simulationSettingsTexts[i].text;
             simulationSettingsSliders[i].onValueChanged.AddListener((value) => OnSimulationSettingChange(simulationSetting, value));
             OnSimulationSettingChange(simulationSetting, simulationSettingsSliders[i].value);
         }
-        
-        for (int i = 0; i < (int)MinerTanksSimulationSetting.Count; i++)
-        {
-            MinerTanksSimulationSetting minerTanksSimulationSetting = (MinerTanksSimulationSetting)i;
+    }
 
-            minerTanksSimulationSettings[i] = minerTanksSimulationSettingTexts[i].text;
-            minerTanksSimulationSettingsSliders[i].onValueChanged.AddListener((value) => 
-                                                                    OnMinerTanksSimulationSettingChange(minerTanksSimulationSetting, value));
-            OnMinerTanksSimulationSettingChange(minerTanksSimulationSetting, minerTanksSimulationSettingsSliders[i].value);
-        }
-
-        startButton.onClick.AddListener(OnStartButtonClick);
+    protected string GetValueFormat(float value)
+    {
+        return ((Mathf.Round(value) != value) ? "0.##" : "");
     }
 
     void OnNeuralNetworkSettingChange(NeuralNetworkSetting neuralNetworkSetting, float value)
@@ -115,7 +109,9 @@ public class SimulationSetUpScreen : MonoBehaviour
                 break;
         }
 
-        neuralNetworkSettingsTexts[index].text = String.Format(neuralNetworkSettings[index], value);
+        string format = GetValueFormat(value);
+        
+        neuralNetworkSettingsTexts[index].text = String.Format(neuralNetworkSettingsStrings[index], value.ToString(format));
     }
 
     void OnSimulationSettingChange(SimulationSetting simulationSetting, float value)
@@ -145,23 +141,10 @@ public class SimulationSetUpScreen : MonoBehaviour
                 break;
         }
 
-        simulationSettingsTexts[index].text = String.Format(simulationSettings[index], value);
+        string format = GetValueFormat(value);
+
+        simulationSettingsTexts[index].text = String.Format(simulationSettingsStrings[index], value.ToString(format));
     }
-
-    void OnMinerTanksSimulationSettingChange(MinerTanksSimulationSetting minerTanksSimulationSetting, float value)
-    {
-        int index = (int)minerTanksSimulationSetting;
-
-        switch (minerTanksSimulationSetting)
-        {
-            case MinerTanksSimulationSetting.NumberOfMines:
-                MinerTanksSimulationManager.Instance.NumberOfMines = (int)value;
-                break;
-        }
-
-        minerTanksSimulationSettingTexts[index].text = String.Format(minerTanksSimulationSettings[index], value);
-    }
-
 
     void OnStartButtonClick()
     {
