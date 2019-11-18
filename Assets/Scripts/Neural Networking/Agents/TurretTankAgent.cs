@@ -10,19 +10,24 @@ namespace GreenNacho.AI.NeuralNetworking
         [SerializeField, Range(1f, 5f)] float fireRate = 2f; 
 
         public Collider NearestEnemy { get; set; }
+        public bool HasShotTarget { get; private set; } = false;
 
-        TankProjectile[] projectilePool = new TankProjectile[3]; 
+        TankProjectile[] projectilePool = new TankProjectile[3];
+        GameObject projectilesContainer;
 
         float fireRateCooldownTimer = 0f;
         bool canShoot = true;
 
         void Start()
         {
-            GameObject container = Instantiate(new GameObject(gameObject.name + "Projectiles"));
+            projectilesContainer = Instantiate(new GameObject(gameObject.name + "Projectiles"));
 
             for (int i = 0; i < projectilePool.Length; i++)
             {
-                GameObject projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, transform.rotation, container.transform);
+                GameObject projectile = Instantiate(projectilePrefab, 
+                                                    projectileSpawnPoint.position, 
+                                                    transform.rotation, 
+                                                    projectilesContainer.transform);
                 
                 projectilePool[i] = projectile.GetComponent<TankProjectile>();
                 
@@ -57,7 +62,23 @@ namespace GreenNacho.AI.NeuralNetworking
                 ResetProjectile(availableProjectile);
                 availableProjectile.Launch(NearestEnemy);
                 canShoot = false;
+                HasShotTarget = true;
             }
+        }
+
+        protected override void IncreaseFitness()
+        {
+            if (!Array.Find(projectilePool, tp => tp.gameObject.activeInHierarchy))
+                HasShotTarget = false;
+            genome.Fitness *= 2f;
+        }
+
+        protected void DecreaseFitness(bool nearMiss)
+        {
+            if (!Array.Find(projectilePool, tp => tp.gameObject.activeInHierarchy))
+                HasShotTarget = false;
+            if (!nearMiss && genome.Fitness > 1)
+                genome.Fitness /= 2f;
         }
 
         public override void Think()
@@ -82,9 +103,6 @@ namespace GreenNacho.AI.NeuralNetworking
 
         public void UpdateFiringCooldown()
         {
-            if (canShoot)
-                return;
-
             fireRateCooldownTimer += Time.fixedDeltaTime;
 
             if (fireRateCooldownTimer >= 1f / fireRate)
@@ -98,6 +116,11 @@ namespace GreenNacho.AI.NeuralNetworking
         {
             for (int i = 0; i < projectilePool.Length; i++)
                 projectilePool[i].UpdateTrajectory();
+        }
+
+        public void DestroyProjectiles()
+        {
+            Destroy(projectilesContainer);
         }
     }
 }

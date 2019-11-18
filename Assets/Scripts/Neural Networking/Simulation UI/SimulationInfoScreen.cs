@@ -53,7 +53,7 @@ public class SimulationInfoScreen : MonoBehaviour
     void OnTimerChange(float value)
     {
         SimulationManager.Instance.IterationsPerUpdate = (int)value;
-        timeScaleText.text = string.Format(timerString, SimulationManager.Instance.IterationsPerUpdate);
+        timeScaleText.text = string.Format(timerString, (int)value);
     }
 
     void OnPauseButtonClick()
@@ -76,7 +76,7 @@ public class SimulationInfoScreen : MonoBehaviour
             lastGeneration = SimulationManager.Instance.Generation;
             generationsText.text = String.Format(generationsString, SimulationManager.Instance.Generation);
             bestFitnessText.text = String.Format(bestFitnessString, SimulationManager.Instance.BestFitness);
-            averageFitnessText.text = String.Format(averageFitnessString, (int)SimulationManager.Instance.AverageFitness);
+            averageFitnessText.text = String.Format(averageFitnessString, Mathf.Round(SimulationManager.Instance.AverageFitness));
             worstFitnessText.text = String.Format(worstFitnessString, SimulationManager.Instance.WorstFitness);
         }
     }

@@ -7,7 +7,6 @@ namespace GreenNacho.AI.NeuralNetworking
         public GameObject NearestMine { get; set; }
 
         const float CloseMineSqrDistance = 2f;
-        const float FitnessMultiplier = 2f;
 
         Vector3 GetDirectionToNearestMine()
         {
@@ -21,7 +20,7 @@ namespace GreenNacho.AI.NeuralNetworking
 
         protected override void IncreaseFitness()
         {
-            genome.Fitness *= FitnessMultiplier;
+            genome.Fitness *= 2f;
         }
 
         public override void Think()

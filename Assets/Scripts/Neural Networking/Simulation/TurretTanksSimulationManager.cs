@@ -58,14 +58,28 @@ namespace GreenNacho.AI.NeuralNetworking
         protected override void OnSimulationAgentUpdate(NeuralNetworkAgent agent)
         {
             TurretTankAgent turretTankAgent = agent as TurretTankAgent;
-
-            Collider enemy = GetNearestEnemy(turretTankAgent.transform);
-
-            turretTankAgent.NearestEnemy = enemy;
+            
+            if (!turretTankAgent.HasShotTarget)
+            {
+                Collider enemy = GetNearestEnemy(turretTankAgent.transform);
+                turretTankAgent.NearestEnemy = enemy;
+            }
+            else
+            {
+                turretTankAgent.UpdateCurrentProjectiles();
+                turretTankAgent.UpdateFiringCooldown();
+            }
 
             turretTankAgent.Think();
-            turretTankAgent.UpdateCurrentProjectiles();
-            turretTankAgent.UpdateFiringCooldown();
+        }
+
+        protected override void OnStopSimulation()
+        {
+            for (int i = 0; i < populationAgents.Count; i++)
+            {
+                TurretTankAgent turretTankAgent = populationAgents[i] as TurretTankAgent;
+                turretTankAgent.DestroyProjectiles();
+            }
         }
     }
 }
