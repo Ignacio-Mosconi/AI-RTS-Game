@@ -59,7 +59,7 @@ namespace GreenNacho.AI.NeuralNetworking
         {
             TurretTankAgent turretTankAgent = agent as TurretTankAgent;
             
-            if (!turretTankAgent.HasShotTarget)
+            if (!turretTankAgent.HasFired)
             {
                 Collider enemy = GetNearestEnemy(turretTankAgent.transform);
                 turretTankAgent.NearestEnemy = enemy;
@@ -71,6 +71,17 @@ namespace GreenNacho.AI.NeuralNetworking
             }
 
             turretTankAgent.Think();
+        }
+
+        protected override void OnStartSimulation()
+        {
+            for (int i = 0; i < populationAgents.Count; i++)
+            {
+                TurretTankAgent turretTankAgent = populationAgents[i] as TurretTankAgent;
+                float maxSceneExtentsDistance = Mathf.Max(sceneHalfExtents.x, sceneHalfExtents.z) * 2f;
+
+                turretTankAgent.MaxSqrDistanceToEnemy = maxSceneExtentsDistance * maxSceneExtentsDistance;
+            }
         }
 
         protected override void OnStopSimulation()

@@ -10,7 +10,8 @@ namespace GreenNacho.AI.NeuralNetworking
         [SerializeField, Range(1f, 5f)] float fireRate = 2f; 
 
         public Collider NearestEnemy { get; set; }
-        public bool HasShotTarget { get; private set; } = false;
+        public float MaxSqrDistanceToEnemy { get; set; }
+        public bool HasFired { get; private set; } = false;
 
         TankProjectile[] projectilePool = new TankProjectile[3];
         GameObject projectilesContainer;
@@ -42,9 +43,12 @@ namespace GreenNacho.AI.NeuralNetworking
             return (NearestEnemy.transform.position - transform.position).normalized;
         }
 
-        float GetSqrDistanceToNearestEnemy()
+        float GetNormalizedSqrDistanceToNearestEnemy()
         {
-            return (NearestEnemy.transform.position - transform.position).sqrMagnitude;
+            float sqrDistance = (NearestEnemy.transform.position - transform.position).sqrMagnitude;
+            sqrDistance = Mathf.Clamp01(sqrDistance / MaxSqrDistanceToEnemy);
+
+            return sqrDistance;
         }
 
         void ResetProjectile(TankProjectile projectile)
@@ -62,21 +66,21 @@ namespace GreenNacho.AI.NeuralNetworking
                 ResetProjectile(availableProjectile);
                 availableProjectile.Launch(NearestEnemy);
                 canShoot = false;
-                HasShotTarget = true;
+                HasFired = true;
             }
         }
 
         protected override void IncreaseFitness()
         {
             if (!Array.Find(projectilePool, tp => tp.gameObject.activeInHierarchy))
-                HasShotTarget = false;
-            genome.Fitness *= 2f;
+                HasFired = false;
+            genome.Fitness *= 10f;
         }
 
         protected void DecreaseFitness(bool nearMiss)
         {
             if (!Array.Find(projectilePool, tp => tp.gameObject.activeInHierarchy))
-                HasShotTarget = false;
+                HasFired = false;
             if (!nearMiss && genome.Fitness > 1)
                 genome.Fitness /= 2f;
         }
@@ -85,7 +89,7 @@ namespace GreenNacho.AI.NeuralNetworking
         {
             Vector3 currentDirection = transform.forward;
             Vector3 targetDirection = GetDirectionToNearestEnemy();
-            float sqrDistanceToEnemy = GetSqrDistanceToNearestEnemy(); 
+            float sqrDistanceToEnemy = GetNormalizedSqrDistanceToNearestEnemy(); 
 
             inputs[0] = targetDirection.x;
             inputs[1] = targetDirection.z;

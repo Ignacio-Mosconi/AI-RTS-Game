@@ -39,7 +39,7 @@ namespace GreenNacho.AI.NeuralNetworking
         [SerializeField] GameObject agentPrefab = default;
 
         [Header("Scene Set Up")]
-        [SerializeField] Vector3 sceneHalfExtents = new Vector3(20f, 0f, 20f);
+        [SerializeField] protected Vector3 sceneHalfExtents = new Vector3(20f, 0f, 20f);
 
         [Header("Basic Neural Network Properties")]
         [SerializeField, Range(0, 100)] int inputs = 4;
